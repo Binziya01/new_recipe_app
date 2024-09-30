@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+body{
+  font-family: "Lora", serif;
+  background: #f9f7f3;
+}
+
+.customShadow{
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+}
+
+/* scrollbar hidden */
+.scrollbar-none::webkit.scrollbar{
+  display: none;
+}
