@@ -18,13 +18,15 @@ export const loginUser=createAsyncThunk(
 
 export const checkAuth=createAsyncThunk(
     'auth/userAuth',
-    async(userCredentials)=>{
-        const request = await axios.get("http://localhost:4000/api/v1/auth/check-auth",userCredentials)
+    async()=>{
+        alert("check user")
+        const request = await axios.get("http://localhost:4000/api/v1/auth/check-auth",{ headers: { 'Authorization': `Bearer ${window.localStorage.getItem('token')}` } })
         const response = await request.data
         console.log(request,"check");
+    
         
-        localStorage.setItem('user',JSON.stringify(response.user))
-        localStorage.setItem('token',JSON.stringify(response.token))
+        // localStorage.setItem('user',JSON.stringify(response.user))
+        //  localStorage.setItem('token',response.token)
         return response
 
     }
@@ -47,7 +49,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState:{
         isLoggedIn:false,
-        loading: false,
+        loading: true,
         user: null,
         token: null,
         error: null
@@ -57,7 +59,13 @@ const authSlice = createSlice({
     setUser: (state, action) => {},
     setToken: (state, action) => {
       state.token = action.payload
-    }
+    },
+    logout: (state) => {
+        console.log("Logout action triggered")
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+      },
 },
     extraReducers:(builder)=>{
         builder
@@ -93,9 +101,10 @@ const authSlice = createSlice({
             state.error = null;
         })
         .addCase(checkAuth.fulfilled,(state,action)=>{
+            alert("user logged")
             state.loading = false;
-            state.user = action.payload;
-            // console.log(action.payload,"User login");
+            state.user = action.payload.success ? action.payload.user : null;
+            console.log(action.payload,"User login");
             state.isLoggedIn = action.payload.success
             state.error = null;
         })
@@ -140,5 +149,5 @@ const authSlice = createSlice({
         // })
     }
 })
-export const { setUser, setToken } = authSlice.actions;
+export const { setUser, setToken, logout } = authSlice.actions;
 export default authSlice.reducer

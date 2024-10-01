@@ -18,42 +18,57 @@ import { checkAuth } from './store/authSlice';
 import CreateCategory from './pages/admin/CreateCategory';
 import CategoryRecipe from './pages/CategoryRecipe';
 import RecipeDetails from './pages/RecipeDetails';
+import AllRecipes from './pages/user-view/AllRecipes';
 // import { Outlet } from 'react-router-dom';
 // import Header from './components/header/Header';
 
 
 function App() {
 
-  const {user, isLoggedIn} = useSelector(state=> state.auth)
-  // const dispatch = useDispatch()
+  const {user, isLoggedIn, loading} = useSelector(state=> state.auth)
+   const dispatch = useDispatch()
 
-  // useEffect(()=>{
-  //   dispatch(checkAuth())
-  // },[dispatch])
+  useEffect(()=>{
+    dispatch(checkAuth())
+  },[dispatch])
+
+  if(loading) return <div>Loading...</div>
+
+  console.log(loading, user);
+  
 
   return (
     <div className="max-w-screen-2xl mx-auto">
     <Header/>
     <Outlet/>
     <Routes>
-      <Route path="/" element=<Home/>/>
+    <Route
+          path="/"
+          element={
+            <Home/>
+          }
+        />
+      {/* <Route path="/" element=<Home/>/> */}
 
       <Route path="/login" element={<CheckAuth isLoggedIn={isLoggedIn} user={user}><Login/></CheckAuth>}/>
-      <Route path="/signup" element={<CheckAuth isLoggedIn={isLoggedIn} user={user}><Signup/></CheckAuth>}/>
+      <Route path="/signup" element={<Signup/>}/>
       <Route path="/error" element={<ErrorPage/>}/>
       <Route path='/unauth-page' element={<UnAuthPage/>}/>
 
       <Route path='/search' element={<Search/>}/>
       <Route path='/recipes/:id' element={<RecipeDetails/>}/>
       <Route path='/categories/:category' element={<CategoryPage/>}/>
+      <Route path='/recipes' element={<AllRecipes/>}/>
 
       <Route path='recipe-category/:categoryName' element={<CategoryRecipe/>}/>
 
 
       <Route path="/dashboard" element={
-        <AdminLayout/>
+         <CheckAuth isLoggedIn={isLoggedIn} user={user}>
+              <AdminLayout />
+            </CheckAuth>
       }>
-      <Route index element={<AdminDashboard/>}/>
+      {/* <Route index element={<AdminDashboard/>}/> */}
       <Route path="admin" element={<AdminDashboard/>}/>
       <Route path="admin/create-category" element={<CreateCategory/>}/>
       <Route path="admin/recipe" element={<AdminRecipe/>}/>

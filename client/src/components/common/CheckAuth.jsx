@@ -3,10 +3,10 @@ import { Navigate, useLocation } from 'react-router-dom'
 
 function CheckAuth ({isLoggedIn, user, children}) {
     const location = useLocation()
-    // console.log(location.pathname, isLoggedIn);
+    console.log(location.pathname, isLoggedIn);
     
-    if(!isLoggedIn && !
-        (location.pathname.includes('/login') ||
+    if(!isLoggedIn &&
+        !(location.pathname.includes('/login') ||
         location.pathname.includes('/signup'))
     ){
   return <Navigate to="/login"/>

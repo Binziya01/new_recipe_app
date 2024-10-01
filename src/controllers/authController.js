@@ -151,3 +151,24 @@ export const logout = (req,res) => {
 export const testController = (req,res)=>{
     res.send("protected route")
 }
+
+// middleware
+
+export const authMiddleware = async(req,res,next)=>{
+    const token = req.cookies.token
+    if(!token) return res.status(400).json({
+        success: false,
+        message: 'Unauthorized user!'
+    })
+
+    try{
+        const decoded = JWT.verify(token,config.JWT_SECRET)
+        req.user= decoded
+        next()
+    }catch(error){
+        res.status(401).json({
+            success: false,
+            message: 'Unauthorized user!'
+        })
+    }
+}

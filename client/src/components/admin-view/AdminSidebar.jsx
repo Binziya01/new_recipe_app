@@ -10,11 +10,11 @@ export const AdminSidebarMenuItems = [
   path: '/dashboard/admin',
   icon: <LuLayoutDashboard />
   },
-  {
-      id : 'category',
-  label : 'Category',
-  path: '/dashboard/admin/create-category'
-  },
+  // {
+  //     id : 'category',
+  // label : 'Category',
+  // path: '/dashboard/admin/create-category'
+  // },
   {
       id : 'recipe',
   label : 'Recipe',

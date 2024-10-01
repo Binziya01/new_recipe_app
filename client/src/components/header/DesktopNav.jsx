@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CheckAuth from '../common/CheckAuth';
+import { AiOutlineLogout } from 'react-icons/ai';
+import axios from 'axios';
+import { logout } from '../../store/authSlice';
 
 
 const DesktopNav = ({menuItems, Logo}) => {
@@ -14,8 +17,21 @@ const DesktopNav = ({menuItems, Logo}) => {
 
   const [openMenu,setOpenMenu]=useState(false)
 	const navigate = useNavigate()
+    
 
- 
+  const handleLogout = async () => {
+    try {
+    
+      const response = await axios.post('http://localhost:4000/api/v1/auth/logout');
+      console.log("Logout API response:", response.data);
+      
+      dispatch(logout());
+      navigate('/login')
+
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   return (
     <div className='h-16 flex justify-between items-center px-6 lg:px-12'>
@@ -73,8 +89,12 @@ const DesktopNav = ({menuItems, Logo}) => {
 						</div>
 					) : ("")
 				}
+                
 				
 			</div>
+            <div className='mt-5'>
+            <button onClick={handleLogout} className='flex items-center gap-2 rounded-md px-3 py-1 bg-red-500 hover:bg-red-600 text-white'><AiOutlineLogout />Logout</button>
+            </div>
             </ul>
             )
         }
